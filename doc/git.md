@@ -16,5 +16,5 @@
    `git commit -m '注释'`
 8. 连接github远程仓库
    `git remote add origin '你的仓库地址'`
-9.  推送本地仓库到远程仓库(新的远程仓库无分支，则会新建一个`master`分支)
+9. 推送本地仓库到远程仓库(新的远程仓库无分支，则会新建一个`master`分支)
    `git push -u origin master`
