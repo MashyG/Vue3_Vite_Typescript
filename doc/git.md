@@ -76,25 +76,29 @@
    ```
    git init
    ```
-5. 提交项目内容
+6. 提交项目内容
    ```
    git add .
    ```
-6. 可查看git状态
+7. 撤销已提交内容
+   ```
+   git reset .
+   ```
+8. 可查看git状态
    ```
    git status
    ```
-7. 上传提交的内容到本地仓库
+9. 上传提交的内容到本地仓库
    ```
    git commit -m '注释'
    ```
-8. 连接github远程仓库
+10. 连接github远程仓库
    ```
    git remote add origin '你的仓库地址'
    // 若有多个github
    git remote add origin 'git@另外的文件名.github.com/xxx'
    ```
-9. 推送本地仓库到远程仓库(新的远程仓库无分支，则会新建一个`master`分支)
+11. 推送本地仓库到远程仓库(新的远程仓库无分支，则会新建一个`master`分支)
    ```
    git push -u origin master
    ```
