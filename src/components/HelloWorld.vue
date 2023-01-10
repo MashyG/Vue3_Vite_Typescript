@@ -1,36 +1,67 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import { read, utils } from 'xlsx'
 
 defineProps<{ msg: string }>()
 
-const count = ref(0)
+const fileList = ref([])
+const fileAfter = ref({})
+
+const showData = ref({})
+
+const handleFileChange = (file: any, files: any) => {
+  const fileReader = new FileReader()
+  fileReader.onload = (ev: any) => {
+    try {
+      const data = ev.target.result
+      const workbook = read(data, {
+        type: 'binary'
+      })
+      fileAfter.value = utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]])
+      console.log(fileAfter.value)
+    } catch(err) {
+      console.error(err)
+    }
+  }
+  fileReader.readAsBinaryString(new Blob([file.raw]));
+  return false
+}
+
+const tableData = computed(() => {
+  return fileAfter.value
+})
+
+const clearList = () => {
+  fileList.value = []
+  fileAfter.value = []
+}
+
 </script>
 
 <template>
   <h1>{{ msg }}</h1>
-
-  <p>
-    Recommended IDE setup:
-    <a href="https://code.visualstudio.com/" target="_blank">VS Code</a>
-    +
-    <a href="https://github.com/johnsoncodehk/volar" target="_blank">Volar</a>
-  </p>
-
-  <p>See <code>README.md</code> for more information.</p>
-
-  <p>
-    <a href="https://vitejs.dev/guide/features.html" target="_blank">
-      Vite Docs
-    </a>
-    |
-    <a href="https://v3.vuejs.org/" target="_blank">Vue 3 Docs</a>
-  </p>
-
-  <button type="button" @click="count++">count is: {{ count }}</button>
-  <p>
-    Edit
-    <code>components/HelloWorld.vue</code> to test hot module replacement.
-  </p>
+  <h2>Parse XLSX File</h2>
+  <ElButton @click="clearList">清空</ElButton>
+  <div>
+    <el-upload
+      v-model:file-list="fileList"
+      class="upload-demo"
+      action="#"
+      :limit="1"
+      accept=".xls,.xlsx"
+      :auto-upload="false"
+      :on-change="handleFileChange"
+    >
+      <el-button type="primary">Click to upload</el-button>
+      <template #tip>
+        <div class="el-upload__tip">only support Excel file</div>
+      </template>
+    </el-upload>
+    After:
+    <p>
+      {{ tableData }}
+    </p>
+  </div>
 </template>
 
 <style scoped>
